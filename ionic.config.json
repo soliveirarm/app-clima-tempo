@@ -1,0 +1,7 @@
+{
+  "name": "app-clima-tempo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
