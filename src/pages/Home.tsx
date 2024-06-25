@@ -1,6 +1,5 @@
 const store = new Storage()
-const createStore = async () => await store.create()
-createStore()
+await store.create()
 const HISTORY = await store.get("HISTORY")
 
 import {
