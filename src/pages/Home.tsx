@@ -1,23 +1,35 @@
+const store = new Storage()
+await store.create()
+const HISTORY = await store.get("HISTORY")
+
 import {
   IonButton,
   IonContent,
   IonHeader,
+  IonImg,
   IonItem,
-  IonList,
   IonPage,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react"
+
 import "./Home.css"
 
-import { Geolocation } from "@capacitor/geolocation"
 import { useEffect, useState } from "react"
+
+import { Geolocation } from "@capacitor/geolocation"
+
 import axios from "axios"
 
-import { Coordinates } from "../types/Coordinates"
 import Weather from "../components/Weather/Weather"
-import { WeatherProps } from "../types/Weather"
+import History from "../components/History"
+
+import { Storage } from "@ionic/storage"
+
+import { Coordinates } from "../types/coordinates"
+import { WeatherProps } from "../types/weather"
+import UserLocation from "../components/UserLocation"
+import GetWeatherInfo from "../components/GetWeatherInfo"
 
 const API_KEY = import.meta.env.VITE_API_KEY
 
@@ -29,6 +41,8 @@ const Home: React.FC = () => {
   const [userLocation, setUserLocation] = useState<Coordinates | null>(null)
   const [weather, setWeather] = useState<WeatherProps | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [history, setHistory] = useState(HISTORY || [])
+  const [isHistoryVisible, setIsHistoryVisible] = useState<boolean>(false)
 
   useEffect(() => {
     const getUserLocation = async () => {
@@ -41,17 +55,36 @@ const Home: React.FC = () => {
     getUserLocation()
   }, [])
 
+  useEffect(() => {
+    store.set("HISTORY", history)
+  }, [store, history, HISTORY])
+
+  const saveData = async (data: WeatherProps) => {
+    let d = new Date().toLocaleString()
+    let [date, time] = d.split(", ")
+    setHistory([...history, { id: Date.now(), data, time, date }])
+    store.set("HISTORY", history)
+  }
+
   const getWeather = async () => {
     setIsLoading(true)
     if (userLocation) {
       const { longitude, latitude } = userLocation
-      const { data } = await instance.get(
-        `current.json?key=${API_KEY}&q=${latitude},${longitude}&aqi=no&lang=pt`
-      )
+      const URL = `current.json?key=${API_KEY}&q=${latitude},${longitude}&aqi=no&lang=pt`
+      const { data } = await instance.get(URL)
       setWeather(data)
+      saveData(data)
     }
     setIsLoading(false)
   }
+
+  const clearHistory = () => {
+    store.clear()
+    setHistory([])
+    setIsHistoryVisible(false)
+  }
+
+  const toggleHistory = () => setIsHistoryVisible((prevState) => !prevState)
 
   return (
     <IonPage>
@@ -66,22 +99,29 @@ const Home: React.FC = () => {
           <IonTitle>Suas coordenadas</IonTitle>
         </IonHeader>
 
-        {userLocation && (
-          <IonList>
-            <IonItem>Longitude: {userLocation.longitude}</IonItem>
-            <IonItem>Latitude: {userLocation.latitude}</IonItem>
-          </IonList>
-        )}
+        {userLocation && <UserLocation {...userLocation} />}
 
-        <IonButton onClick={getWeather}>
-          Clique para obter informações sobre o clima
-        </IonButton>
+        <GetWeatherInfo onClick={getWeather} />
 
         {weather && <Weather {...weather} />}
         {isLoading && (
-          <IonText className="ion-text-center">Buscando dados...</IonText>
+          <IonItem className="ion-text-center">Buscando dados...</IonItem>
         )}
       </IonContent>
+
+      {history.length !== 0 && (
+        <>
+          <IonButton onClick={toggleHistory}>
+            {isHistoryVisible ? "Ocultar" : "Mostrar"} Histórico
+          </IonButton>
+
+          <History
+            clearHistory={clearHistory}
+            isVisible={isHistoryVisible}
+            history={history}
+          />
+        </>
+      )}
     </IonPage>
   )
 }

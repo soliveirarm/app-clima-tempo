@@ -1,6 +1,4 @@
 import {
-  IonContent,
-  IonHeader,
   IonImg,
   IonItem,
   IonItemDivider,
@@ -10,7 +8,7 @@ import {
   IonText,
 } from "@ionic/react"
 
-import { WeatherProps } from "../../types/Weather"
+import { WeatherProps } from "../../types/weather"
 
 import "./Weather.css"
 
