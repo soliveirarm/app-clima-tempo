@@ -25,24 +25,27 @@ function History({
   return (
     <IonContent className={!isVisible ? "ion-hide" : undefined}>
       <IonList>
-        {history.map(({ id, data, date, time }: HistoryProps) => (
-          <IonItemGroup key={id}>
-            <IonItemDivider className="ion-padding">
-              <IonLabel>
-                {data.location.name}, {data.location.country} - {date},
-                {time.substring(0, 5)}
-              </IonLabel>
-            </IonItemDivider>
+        {history.map(({ id, data, date, time }: HistoryProps) => {
+          const { location, current } = data
+          const { icon, text } = current.condition
 
-            <IonItem>
-              <IonImg src={data.current.condition.icon} />
-              <IonLabel>
-                {data.current.temp_c.toFixed(0)} ºC -{" "}
-                {data.current.condition.text}
-              </IonLabel>
-            </IonItem>
-          </IonItemGroup>
-        ))}
+          return (
+            <IonItemGroup key={id}>
+              <IonItemDivider className="ion-padding">
+                <IonLabel>
+                  {location.name}, {location.country} - {date},{time}
+                </IonLabel>
+              </IonItemDivider>
+
+              <IonItem>
+                <IonImg src={icon} />
+                <IonLabel>
+                  {current.temp_c.toFixed(0)} ºC - {text}
+                </IonLabel>
+              </IonItem>
+            </IonItemGroup>
+          )
+        })}
       </IonList>
 
       <IonButton
