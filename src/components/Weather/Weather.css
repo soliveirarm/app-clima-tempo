@@ -1,0 +1,12 @@
+.icon {
+  width: 64px;
+}
+
+.temperature {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.details {
+  color: #ddd;
+}
