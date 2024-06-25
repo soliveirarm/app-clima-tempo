@@ -16,3 +16,15 @@ export type WeatherProps = {
     region: string
   }
 }
+
+export type Coordinates = {
+  latitude: number
+  longitude: number
+}
+
+export type HistoryProps = {
+  id: number
+  data: WeatherProps
+  time: string
+  date: string
+}

@@ -8,7 +8,8 @@ import {
   IonLabel,
   IonList,
 } from "@ionic/react"
-import { HistoryProps } from "../types/history"
+
+import { HistoryProps } from "../types"
 
 type HistoryArray = {
   history: HistoryProps[]

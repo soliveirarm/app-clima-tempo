@@ -6,7 +6,6 @@ import {
   IonButton,
   IonContent,
   IonHeader,
-  IonImg,
   IonItem,
   IonPage,
   IonTitle,
@@ -26,8 +25,9 @@ import History from "../components/History"
 
 import { Storage } from "@ionic/storage"
 
-import { Coordinates } from "../types/coordinates"
-import { WeatherProps } from "../types/weather"
+import { Coordinates } from "../types"
+import { WeatherProps } from "../types"
+
 import UserLocation from "../components/UserLocation"
 import GetWeatherInfo from "../components/GetWeatherInfo"
 

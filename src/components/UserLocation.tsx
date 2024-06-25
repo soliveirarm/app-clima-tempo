@@ -1,5 +1,5 @@
 import { IonItem, IonList } from "@ionic/react"
-import { Coordinates } from "../types/coordinates"
+import { Coordinates } from "../types"
 
 function UserLocation({ longitude, latitude }: Coordinates) {
   return (

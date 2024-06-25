@@ -8,7 +8,7 @@ import {
   IonText,
 } from "@ionic/react"
 
-import { WeatherProps } from "../../types/weather"
+import { WeatherProps } from "../../types"
 
 import "./Weather.css"
 
